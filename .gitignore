@@ -3,3 +3,4 @@ bin
 *.mp4
 *.wav
 *.txt
+.ipynb_checkpoints
