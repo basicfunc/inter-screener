@@ -10,24 +10,24 @@ Inter-Screener is an open-source project provided as-is without any warranty or 
 
 Inter-Screener currently offers the following features:
 
-[x] Speech Rate: Analyzes the speed at which the user speaks.
-[x] Tone of Voice: Assesses the tone and emotional quality of the user's voice.
-[x] Rhythm: Evaluates the rhythmic patterns in the user's speech.
-[x] Confidence: Measures the level of confidence exhibited by the user.
-[x] Spectrogram: Generates a visual representation of the audio frequency content.
-[x] Engagement: Utilizes head and other movements to determine the user's level of engagement.
-[ ] Body Language (upcoming): Analyzes the user's body language to assess posture, gestures, and energy level.
-[ ] Eye Contact (upcoming): Evaluates the user's eye contact with the camera.
-[ ] Verbal Fluency (upcoming): Assesses the user's ability to express thoughts smoothly and effectively.
-[ ] Posture (upcoming): Analyzes the user's body posture during communication.
-[ ] Gestures (upcoming): Evaluates the use of hand gestures during the video.
-[ ] Energy Level (upcoming): Measures the level of energy exhibited by the user.
-[ ] Use of Filler Words (upcoming): Identifies the frequency and usage of filler words.
-[ ] Pacing (upcoming): Analyzes the user's speed and rhythm of speech.
-[ ] Nervous Habits (upcoming): Identifies and evaluates nervous habits exhibited by the user.
-[ ] Vocal Pitch (upcoming): Assesses the pitch and tonal variations in the user's voice.
-[ ] Confidence Indicators (upcoming): Identifies specific indicators of confidence in the user's behavior.
-[ ] Confidence Fluctuations (upcoming): Tracks and analyzes variations in the user's confidence levels.
+- [x] Speech Rate: Analyzes the speed at which the user speaks.
+- [x] Tone of Voice: Assesses the tone and emotional quality of the user's voice.
+- [x] Rhythm: Evaluates the rhythmic patterns in the user's speech.
+- [x] Confidence: Measures the level of confidence exhibited by the user.
+- [x] Spectrogram: Generates a visual representation of the audio frequency content.
+- [x] Engagement: Utilizes head and other movements to determine the user's level of engagement.
+- [ ] Body Language (upcoming): Analyzes the user's body language to assess posture, gestures, and energy level.
+- [ ] Eye Contact (upcoming): Evaluates the user's eye contact with the camera.
+- [ ] Verbal Fluency (upcoming): Assesses the user's ability to express thoughts smoothly and effectively.
+- [ ] Posture (upcoming): Analyzes the user's body posture during communication.
+- [ ] Gestures (upcoming): Evaluates the use of hand gestures during the video.
+- [ ] Energy Level (upcoming): Measures the level of energy exhibited by the user.
+- [ ] Use of Filler Words (upcoming): Identifies the frequency and usage of filler words.
+- [ ] Pacing (upcoming): Analyzes the user's speed and rhythm of speech.
+- [ ] Nervous Habits (upcoming): Identifies and evaluates nervous habits exhibited by the user.
+- [ ] Vocal Pitch (upcoming): Assesses the pitch and tonal variations in the user's voice.
+- [ ] Confidence Indicators (upcoming): Identifies specific indicators of confidence in the user's behavior.
+- [ ] Confidence Fluctuations (upcoming): Tracks and analyzes variations in the user's confidence levels.
 
 ## Installation
 
