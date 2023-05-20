@@ -1,100 +1,101 @@
 import cv2
-import numpy as np
+import dlib
+from scipy.spatial import distance as dist
+from tqdm import tqdm
+import pandas as pd
 
-# Load the pre-trained face cascade classifier
-face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
+class EyeEngagementAnalyzer:
+    def __init__(self, video_path, predictor_path, engagement_thresholds):
+        self.video_path = video_path
+        self.predictor_path = predictor_path
+        self.detector = dlib.get_frontal_face_detector()
+        self.predictor = dlib.shape_predictor(predictor_path)
+        self.ear_sum = 0
+        self.frame_count = 0
+        self.pbar = None
+        self.engagement_thresholds = engagement_thresholds
+        self.engagement_data = []
 
-# Load the pre-trained eye cascade classifier
-eye_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_eye.xml')
+    def eye_aspect_ratio(self, eye) -> float:
+        A = dist.euclidean(eye[1], eye[5])
+        B = dist.euclidean(eye[2], eye[4])
+        C = dist.euclidean(eye[0], eye[3])
+        ear = (A + B) / (2.0 * C)
+        return ear
 
-# Initialize variables for metrics
-frame_count = 0  # Total frames processed
-movement_count = 0  # Total movements detected
-face_count = 0  # Total faces detected
-eye_contact_count = 0  # Total frames with eye contact
+    def process_video(self) -> None:
+        cap = cv2.VideoCapture(self.video_path)
+        total_frames = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
+        frame_rate = cap.get(cv2.CAP_PROP_FPS)
+        self.pbar = tqdm(total=total_frames, desc='Processing Frames')
 
-def calculate_movement(frame1, frame2):
-    # Convert frames to grayscale for simplicity
-    gray1 = cv2.cvtColor(frame1, cv2.COLOR_BGR2GRAY)
-    gray2 = cv2.cvtColor(frame2, cv2.COLOR_BGR2GRAY)
+        while True:
+            ret, frame = cap.read()
+            if not ret:
+                break
 
-    # Compute absolute difference between the frames
-    frame_diff = cv2.absdiff(gray1, gray2)
+            timestamp = cap.get(cv2.CAP_PROP_POS_MSEC) / 1000.0
 
-    # Apply a threshold to extract significant differences
-    _, threshold = cv2.threshold(frame_diff, 30, 255, cv2.THRESH_BINARY)
+            gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+            faces = self.detector(gray, 0)
 
-    # Count the number of white pixels (movement) in the thresholded image
-    movement = cv2.countNonZero(threshold)
+            current_frame_data = {
+                'Timestamp': timestamp,
+                'EyeEngagement': None,
+                'EngagementLevel': None
+            }
 
-    return movement
+            for face in faces:
+                landmarks = self.predictor(gray, face)
 
-def detect_faces(frame):
-    # Convert frame to grayscale for face detection
-    gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+                left_eye = [(landmarks.part(i).x, landmarks.part(i).y) for i in range(36, 42)]
+                right_eye = [(landmarks.part(i).x, landmarks.part(i).y) for i in range(42, 48)]
 
-    # Detect faces in the frame
-    faces = face_cascade.detectMultiScale(gray, scaleFactor=1.1, minNeighbors=5, minSize=(30, 30))
+                left_ear = self.eye_aspect_ratio(left_eye)
+                right_ear = self.eye_aspect_ratio(right_eye)
+                avg_ear = (left_ear + right_ear) / 2.0
 
-    return faces
+                self.ear_sum += avg_ear
+                self.frame_count += 1
 
-def detect_eyes(frame):
-    # Convert frame to grayscale for eye detection
-    gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+                current_frame_data['EyeEngagement'] = avg_ear * 100
+                current_frame_data['EngagementLevel'] = self.calculate_engagement_level(avg_ear)
 
-    # Detect eyes in the frame
-    eyes = eye_cascade.detectMultiScale(gray, scaleFactor=1.1, minNeighbors=5, minSize=(30, 30))
+            self.engagement_data.append(current_frame_data)
+            self.pbar.update(1)
 
-    return eyes
+        cap.release()
+        self.pbar.close()
 
-# Path to your video file
-video_path = 'input.mp4'
-cap = cv2.VideoCapture(video_path)
+    def calculate_engagement_level(self, ear):
+        if ear < self.engagement_thresholds['low']:
+            return 'Low'
+        elif ear < self.engagement_thresholds['medium']:
+            return 'Medium'
+        else:
+            return 'High'
 
-while cap.isOpened():
-    ret, frame1 = cap.read()
-    ret, frame2 = cap.read()
+    def calculate_eye_engagement(self) -> float:
+        overall_ear = (self.ear_sum / self.frame_count) * 100
+        return overall_ear
 
-    if not ret:
-        break
+    def save_data_to_dataframe(self, filename) -> None:
+        df = pd.DataFrame(self.engagement_data)
+        df.to_csv(filename, index=False)
 
-    # Calculate movement between frames
-    movement = calculate_movement(frame1, frame2)
+    def data_to_dataframe(self, filename) -> pd.DataFrame:
+        return pd.DataFrame(self.engagement_data)
 
-    # Update metrics
-    frame_count += 1
-    movement_count += movement
+if __name__ == "__main__":
+    video_path = "input.mp4"
+    predictor_path = "models/shape_predictor_68_face_landmarks.dat"
 
-    # Detect faces in the frame
-    faces = detect_faces(frame1)
+    thresholds = {
+        'low': 0.2,
+        'medium': 0.4
+    }
 
-    # Update face count
-    face_count += len(faces)
-
-    # Detect eyes in the frame
-    eyes = detect_eyes(frame1)
-
-    # Check for eye contact by counting the presence of eyes
-    if len(eyes) > 0:
-        eye_contact_count += 1
-
-    # Display frames (optional)
-    cv2.imshow('Video', frame1)
-
-    if cv2.waitKey(1) & 0xFF == ord('q'):
-        break
-
-# Release resources
-cap.release()
-cv2.destroyAllWindows()
-
-# Calculate engagement metrics based on the collected data
-total_frames = frame_count
-average_movement = movement_count / total_frames
-average_face_count = face_count / total_frames
-eye_contact_percentage = (eye_contact_count / total_frames) * 100
-
-print("Total Frames:", total_frames)
-print("Average Movement:", average_movement)
-print("Average Face Count:", average_face_count)
-print("Eye Contact Percentage:", eye_contact_percentage)
+    analyzer = EyeEngagementAnalyzer(video_path, predictor_path, thresholds)
+    analyzer.process_video()
+    analyzer.calculate_eye_engagement()
+    analyzer.save_data_to_dataframe("eye_engagement_data.csv")
