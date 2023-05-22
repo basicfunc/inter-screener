@@ -17,12 +17,12 @@ Inter-Screener currently offers the following features:
 - [x] Spectrogram: Generates a visual representation of the audio frequency content.
 - [x] Engagement: Utilizes head and other movements to determine the user's level of engagement.
 - [ ] Body Language (upcoming): Analyzes the user's body language to assess posture, gestures, and energy level.
-- [ ] Eye Contact (upcoming): Evaluates the user's eye contact with the camera.
+- [x] Eye Contact (upcoming): Evaluates the user's eye contact with the camera.
 - [ ] Verbal Fluency (upcoming): Assesses the user's ability to express thoughts smoothly and effectively.
 - [ ] Posture (upcoming): Analyzes the user's body posture during communication.
 - [ ] Gestures (upcoming): Evaluates the use of hand gestures during the video.
 - [ ] Energy Level (upcoming): Measures the level of energy exhibited by the user.
-- [ ] Use of Filler Words (upcoming): Identifies the frequency and usage of filler words.
+- [x] Use of Filler Words (upcoming): Identifies the frequency and usage of filler words.
 - [ ] Pacing (upcoming): Analyzes the user's speed and rhythm of speech.
 - [ ] Nervous Habits (upcoming): Identifies and evaluates nervous habits exhibited by the user.
 - [ ] Vocal Pitch (upcoming): Assesses the pitch and tonal variations in the user's voice.
