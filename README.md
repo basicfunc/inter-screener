@@ -72,7 +72,7 @@ git commit -m "Add feature/bug fix description"
 
 - Push your changes to your forked repository:
 ```
-    git push origin feature/your-feature-name
+git push origin feature/your-feature-name
 ```
 
 - Open a pull request in the main repository.
