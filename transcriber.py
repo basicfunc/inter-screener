@@ -26,7 +26,7 @@ if __name__ == '__main__':
 	clean()
 	whisper_path = 'bin/whisper.exe'
 	whisper_model = 'models/whisper-small.bin'
-	arguments = ['-m', whisper_model, '-f', input_file, '-otxt', '-of', 'transcribe']
+	arguments = ['-m', whisper_model, '-f', input_file, '-ml' , '1', '-ocsv', '-of', 'transcribe']
 
 	if os.path.isfile('transcribe.txt'):
 		print("'transcribe.txt' already exists. Deleting...")
