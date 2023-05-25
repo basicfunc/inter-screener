@@ -3,9 +3,10 @@ from langchain import PromptTemplate, LLMChain
 tp = """
 Act as an interviewer, you are tasked with conducting a comprehensive analysis of a recent interview response to evaluate the candidate's communication skills, problem-solving abilities, and overall suitability.
 In addition, you will assess their level of enthusiasm, adaptability, and cultural fit within the organization.
+Identify the content what candidate is answering, and check whether he/she is correct on topic or not.
 
 Use bullet points.
-Be sharp and clear.
+Be sharp.
 
 Response: {script}
 

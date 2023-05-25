@@ -2,12 +2,15 @@ import tempfile
 import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
+
 from dotenv import dotenv_values
+
 from tools.analyze_script import postProcess_output, analyze_text
 from tools.transcriber import transcript
 from tools.audio import AudioAnalyzer, audioReport
 from tools.emotion import EmotionAnalyzer
 from tools.eye_engagement import EyeEngagementAnalyzer
+from tools.filler_words import FillerWordAnalyzer
 
 config = dotenv_values('.env')
 
@@ -29,8 +32,6 @@ def main():
     with tempfile.NamedTemporaryFile(delete=False, suffix=f'.{ext}') as input_video:
         input_video.write(file_path.getvalue())
         video_path = input_video.name
-
-    # st.write(f"Video File:\t{video_path}")
 
     del(file_path)
     
@@ -59,6 +60,12 @@ def main():
 
     del(data, df)
 
+    st.title("Filler Word Report")
+    fillerAnalysis = FillerWordAnalyzer(text)
+    filler_count, filler_percentage = fillerAnalysis.calculate_filler_word_frequency()
+    st.write(f"Filler word frequency: {filler_count}")
+    st.write(f"Filler word percentage: {filler_percentage:.2f}%")
+
     st.title("Emotion Aanalysis Report")
     emotionAnalysis = EmotionAnalyzer(FER_MODEL, video_path)
     emotionAnalysis.analyze_video()
@@ -77,6 +84,8 @@ def main():
     st.write(f'Negative Emotions: {neg_emotion:.2f}%\n\n')
 
     st.pyplot(emotionAnalysis.plot())
+
+    del(df)
 
     st.title('Eye Engagement Report')
 
@@ -97,10 +106,14 @@ def main():
     df.plot(x='Timestamp', y='EyeEngagement', kind='line', ax=ax)
     st.pyplot(fig)
 
+    del(fig)
+
     # Bar plot
-    fig2, ax2 = plt.subplots()
-    df['EngagementLevel'].value_counts().plot(kind='bar', ax=ax2)
-    st.pyplot(fig2)
+    fig, ax = plt.subplots()
+    df['EngagementLevel'].value_counts().plot(kind='bar', ax=ax)
+    st.pyplot(fig)
+
+    del(df, fig)
 
 if __name__ == "__main__":
     main()
