@@ -58,13 +58,3 @@ def postProcess_output(output):
     lines = output.strip().splitlines()
     res = [line.strip() for line in lines]
     return "\n".join(res)
-
-if __name__ == '__main__':
-	from dotenv import dotenv_values
-	config = dotenv_values('.env')
-
-	with open('transcribe.txt') as f:
-		script = f.read()
-
-	output = analyze_text('text-davinci-003', config['OPENAI_API_KEY'], script)
-	print(postProcess_output(output=output))

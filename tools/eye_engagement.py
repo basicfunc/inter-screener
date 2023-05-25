@@ -83,7 +83,7 @@ class EyeEngagementAnalyzer:
         df = pd.DataFrame(self.engagement_data)
         df.to_csv(filename, index=False)
 
-    def data_to_dataframe(self, filename) -> pd.DataFrame:
+    def data_to_dataframe(self) -> pd.DataFrame:
         return pd.DataFrame(self.engagement_data)
 
 if __name__ == "__main__":
@@ -98,4 +98,15 @@ if __name__ == "__main__":
     analyzer = EyeEngagementAnalyzer(video_path, predictor_path, thresholds)
     analyzer.process_video()
     analyzer.calculate_eye_engagement()
-    analyzer.save_data_to_dataframe("eye_engagement_data.csv")
+
+    import matplotlib.pyplot as plt
+
+    df = analyzer.data_to_dataframe()
+    df.plot(x='Timestamp', y='EyeEngagement', kind='line')
+    plt.show()
+
+    overall_engagement = analyzer.calculate_engagement_level(df['EyeEngagement'].mean())
+    print(overall_engagement)
+
+    df['EngagementLevel'].value_counts().plot(kind='bar')
+    plt.show()

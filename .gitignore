@@ -1,8 +1,11 @@
-.env
 models
-bin
+
+.venv
+.env
+.ipynb_checkpoints
+.pdm-python
+
 *.mp4
 *.wav
 *.txt
 *.csv
-.ipynb_checkpoints

@@ -1,0 +1,26 @@
+
+[project]
+name = "inter-screener"
+version = "1.0"
+description = ""
+authors = [
+    {name = "Rahul", email = "basicfunc@gmail.com"},
+]
+dependencies = [
+    "openai-whisper>=20230314",
+    "dotenv>=0.0.5",
+    "langchain>=0.0.178",
+    "numpy>=1.24.3",
+    "matplotlib>=3.7.1",
+    "librosa>=0.10.0.post2",
+    "tqdm>=4.65.0",
+    "pandas>=2.0.1",
+    "scipy>=1.9.3",
+    "dlib>=19.24.1",
+    "nltk>=3.8.1",
+    "openai>=0.27.7",
+    "ffmpeg-python>=0.2.0",
+    "streamlit>=1.22.0",
+]
+requires-python = ">=3.10"
+license = {text = "MIT"}
